@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitHer - Moda Esportiva Feminina</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Paleta: Branco (#FFFFFF), Preto (#000000), Cinza Claro (#F5F5F5), Rosa Suave (#F5E6E8) */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #FFFFFF;
+            color: #000000;
+            line-height: 1.6;
+        }
+        header {
+            background-color: #FFFFFF;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #F5F5F5;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            font-family: 'Lora', serif;
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #000000;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+        }
+        nav a {
+            color: #000000;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: #F5E6E8;
+        }
+        .menu-toggle {
+            display: none;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        .banner {
+            position: relative;
+            height: 600px;
+            overflow: hidden;
+        }
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        .carousel img {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+        }
+        .carousel-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #000000;
+            font-family: 'Lora', serif;
+            font-size: 3em;
+            text-shadow: 2px 2px 8px rgba(245,230,232,0.2);
+            text-align: center;
+        }
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        .carousel-nav button {
+            background: rgba(0,0,0,0.5);
+            color: #FFFFFF;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 1.5em;
+        }
+        .section {
+            padding: 60px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h2 {
+            font-family: 'Lora', serif;
+            font-size: 2.2em;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #000000;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            justify-items: center;
+        }
+        .product {
+            background-color: #FFFFFF;
+            border: none;
+            padding: 0;
+            width: 100%;
+            max-width: 280px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .product:hover {
+            transform: translateY(-10px);
+        }
+        .product img {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .product h3 {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin: 15px 0 5px;
+            color: #000000;
+        }
+        .product p {
+            font-size: 0.9em;
+            color: #666666;
+            margin: 5px 0;
+        }
+        .product .price {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #000000;
+            margin: 10px 0;
+        }
+        .button {
+            background-color: #000000;
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+        .button:hover {
+            background-color: #F5E6E8;
+            color: #000000;
+        }
+        .filters {
+            margin-bottom: 50px;
+            text-align: center;
+        }
+        .filters button {
+            background-color: transparent;
+            color: #000000;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 15px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: border-bottom 0.3s ease, color 0.3s ease;
+        }
+        .filters button:hover, .filters button.active {
+            border-bottom: 2px solid #000000;
+            color: #F5E6E8;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #FFFFFF;
+            padding: 30px;
+            max-width: 600px;
+            border-radius: 10px;
+            position: relative;
+        }
+        .modal-content img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        form input, form textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #E5E5E5;
+            background-color: #F9F9F9;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1em;
+            border-radius: 5px;
+        }
+        form button {
+            background-color: #000000;
+            color: #FFFFFF;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+        /* Estilo do carrinho inspirado na Zara */
+        .cart-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        .cart-items {
+            flex: 2;
+            min-width: 300px;
+        }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #E5E5E5;
+        }
+        .cart-item img {
+            width: 80px;
+            height: 100px;
+            object-fit: cover;
+            margin-right: 20px;
+            border-radius: 5px;
+        }
+        .cart-item-details {
+            flex: 1;
+        }
+        .cart-item-details h4 {
+            font-size: 1em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .cart-item-details p {
+            font-size: 0.9em;
+            color: #666666;
+        }
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .cart-item-quantity button {
+            background: transparent;
+            border: 1px solid #E5E5E5;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .cart-item-quantity span {
+            margin: 0 10px;
+            font-size: 1em;
+        }
+        .cart-item button.remove {
+            background: transparent;
+            color: #000000;
+            border: none;
+            text-decoration: underline;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+        .cart-summary {
+            flex: 1;
+            min-width: 300px;
+            background: #F5F5F5;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .cart-summary h3 {
+            font-family: 'Lora', serif;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .cart-summary p {
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+        .cart-empty {
+            text-align: center;
+            font-size: 1.1em;
+            color: #666666;
+            padding: 40px;
+        }
+        footer {
+            background-color: #F5F5F5;
+            color: #666666;
+            text-align: center;
+            padding: 30px;
+            font-size: 0.9em;
+        }
+        /* Responsividade */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            nav {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                padding: 20px;
+            }
+            nav.active {
+                display: flex;
+            }
+            nav a {
+                margin: 10px 0;
+            }
+            .menu-toggle {
+                display: block;
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+            .banner {
+                height: 400px;
+            }
+            .carousel-text {
+                font-size: 2em;
+            }
+            .products {
+                grid-template-columns: 1fr;
+            }
+            .cart-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">FitHer</div>
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    <nav>
+        <a href="#home" onclick="showSection('home')">Home</a>
+        <a href="#loja" onclick="showSection('loja')">Loja</a>
+        <a href="#sobre" onclick="showSection('sobre')">Sobre</a>
+        <a href="#contato" onclick="showSection('contato')">Contato</a>
+    </nav>
+</header>
+
+<section id="home" class="section">
+    <div class="banner">
+        <div class="carousel" id="carousel">
+            <img src="https://i.pinimg.com/736x/7e/56/07/7e560750de2370f19eaa818a8630cc86.jpg" alt="Banner 1">
+            <img src="https://i.pinimg.com/originals/db/12/45/db12452fe209f6b971b4aa91890f5811.jpg" alt="Banner 2">
+            <img src="https://img.lojasrenner.com.br/item/879655322/large/3.jpg" alt="Banner 3">
+        </div>
+        <div class="carousel-text">Estilo e Performance</div>
+        <div class="carousel-nav">
+            <button onclick="prevSlide()">&larr;</button>
+            <button onclick="nextSlide()">&rarr;</button>
+        </div>
+    </div>
+
+        <!-- BLOCO INFORMATIVO TECNOLOGIA ANTIODOR -->
+        <section class="section" style="background: #F5E6E8; border-radius: 14px; margin: 40px 0 30px 0; box-shadow: 0 2px 8px rgba(245, 230, 232, 0.15); padding: 0; max-width: 950px; margin-left: auto; margin-right: auto;">
+            <div style="display: flex; flex-wrap: wrap; align-items: stretch; min-height: 260px;">
+                <div style="flex: 1 1 260px; min-width: 220px; max-width: 350px; background: #fff; border-radius: 14px 0 0 14px; display: flex; align-items: center; justify-content: center; padding: 30px;">
+                    <img src="https://img.icons8.com/color/160/000000/bacteria.png" alt="Tecnologia Antiodor" style="width: 120px; height: 120px;">
+                </div>
+                <div style="flex: 2 1 350px; min-width: 260px; padding: 40px 30px; display: flex; flex-direction: column; justify-content: center;">
+                    <h2 style="font-size: 1.6em; color: #000; margin-bottom: 12px; text-align: left;">Tecnologia Antiodor FitHer</h2>
+                    <p style="color: #444; font-size: 1.1em; line-height: 1.7; margin-bottom: 18px;">Nossa linha utiliza tecidos inteligentes com tratamento antibacteriano, que inibem a proliferação de microrganismos causadores do mau odor. O resultado é mais conforto, confiança e frescor durante todo o treino, mesmo nos dias mais intensos.</p>
+                    <ul style="color: #444; font-size: 1em; margin-left: 18px; margin-bottom: 0;">
+                        <li><b>Redução do odor</b> mesmo após horas de uso</li>
+                        <li><b>Mais higiene</b> e sensação de frescor</li>
+                        <li><b>Ideal</b> para treinos, corridas e uso diário</li>
+                        <li><b>Durabilidade</b> do efeito mesmo após várias lavagens</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    <h2>Destaques e Promoções</h2>
+    <p style="text-align: center; font-size: 1.1em; color: #666666; margin-bottom: 40px;">Nova coleção de leggings com tecnologia anti-odor!</p>
+    <div class="products">
+        <div class="product" onclick="openProductModal('Legging Rosa', 99.90, 'Material: Poliéster e elastano. Cores: Rosa, Lilás. Tamanhos: P, M, G. Diferencial: Tecido respirável para esportes femininos.', 'https://www.lettsports.com.br/app-lett/assets/images/dinamica/produto/396/cor_0/5748jubilee-calca-legging-laranja-push-150223-9b9e40.jpg')">
+            <img src="https://www.lettsports.com.br/app-lett/assets/images/dinamica/produto/396/cor_0/5748jubilee-calca-legging-laranja-push-150223-9b9e40.jpg" alt="Legging Rosa">
+            <h3>Legging Rosa</h3>
+            <p>Confortável e estilosa para corridas.</p>
+            <p class="price">R$ 99,90</p>
+            <button class="button" onclick="addToCart('Legging Rosa', 99.90, 'https://www.lettsports.com.br/app-lett/assets/images/dinamica/produto/396/cor_0/5748jubilee-calca-legging-laranja-push-150223-9b9e40.jpg')">Comprar</button>
+        </div>
+        <div class="product" onclick="openProductModal('Top Lilás', 79.90, 'Material: Algodão orgânico. Cores: Lilás, Branco. Tamanhos: P, M, G. Diferencial: Suporte ergonômico para atividades físicas.', 'https://www.hardyn.com.br/app/assets/images/dinamica/produto/2138/cor_0/hdn1948-top-de-corrida-com-bolso-nas-costas-lilas-020425-281839.png')">
+            <img src="https://www.hardyn.com.br/app/assets/images/dinamica/produto/2138/cor_0/hdn1948-top-de-corrida-com-bolso-nas-costas-lilas-020425-281839.png" alt="Top Lilás">
+            <h3>Top Lilás</h3>
+            <p>Suporte ideal para yoga.</p>
+            <p class="price">R$ 79,90</p>
+            <button class="button" onclick="addToCart('Top Lilás', 79.90, 'https://www.hardyn.com.br/app/assets/images/dinamica/produto/2138/cor_0/hdn1948-top-de-corrida-com-bolso-nas-costas-lilas-020425-281839.png')">Comprar</button>
+        </div>
+        <div class="product" onclick="openProductModal('Jaqueta Cinza', 129.90, 'Material: Poliamida. Cores: Cinza, Rosa. Tamanhos: P, M, G. Diferencial: Resistente à água para treinos ao ar livre.', 'https://fitli.fbitsstatic.net/img/p/jaqueta-corta-vento-esportiva-cinza-chumbo-74037/267546.jpg?w=880&h=950&v=no-change&qs=ignore')">
+            <img src="https://fitli.fbitsstatic.net/img/p/jaqueta-corta-vento-esportiva-cinza-chumbo-74037/267546.jpg?w=880&h=950&v=no-change&qs=ignore" alt="Jaqueta Cinza">
+            <h3>Jaqueta Cinza</h3>
+            <p>Perfeita para treinos ao ar livre.</p>
+            <p class="price">R$ 129,90</p>
+            <button class="button" onclick="addToCart('Jaqueta Cinza', 129.90, 'https://fitli.fbitsstatic.net/img/p/jaqueta-corta-vento-esportiva-cinza-chumbo-74037/267546.jpg?w=880&h=950&v=no-change&qs=ignore')">Comprar</button>
+        </div>
+    </div>
+</section>
+
+<section id="loja" class="section" style="display: none;">
+    <h2>Loja</h2>
+    <div class="filters">
+        <button onclick="filterProducts('all')" class="active">Todos</button>
+        <button onclick="filterProducts('roupas')">Roupas</button>
+        <button onclick="filterProducts('acessorios')">Acessórios</button>
+        <button onclick="filterProducts('kits')">Kits</button>
+        <button onclick="filterProducts('promocoes')">Promoções</button>
+    </div>
+    <div class="products" id="product-list">
+        <div class="product" data-category="roupas" onclick="openProductModal('Legging Rosa', 99.90, 'Material: Poliéster e elastano. Cores: Rosa, Lilás. Tamanhos: P, M, G. Diferencial: Tecido respirável para esportes femininos.', 'https://www.lettsports.com.br/app-lett/assets/images/dinamica/produto/396/cor_0/5748jubilee-calca-legging-laranja-push-150223-9b9e40.jpg')">
+            <img src="https://www.lettsports.com.br/app-lett/assets/images/dinamica/produto/396/cor_0/5748jubilee-calca-legging-laranja-push-150223-9b9e40.jpg" alt="Legging Rosa">
+            <h3>Legging Rosa</h3>
+            <p>Material: Poliéster e elastano. Cores: Rosa, Lilás. Tamanhos: P, M, G.</p>
+            <p class="price">R$ 99,90</p>
+            <button class="button" onclick="addToCart('Legging Rosa', 99.90, 'https://www.lettsports.com.br/app-lett/assets/images/dinamica/produto/396/cor_0/5748jubilee-calca-legging-laranja-push-150223-9b9e40.jpg')">Comprar</button>
+        </div>
+        <div class="product" data-category="roupas" onclick="openProductModal('Top Lilás', 79.90, 'Material: Algodão orgânico. Cores: Lilás, Branco. Tamanhos: P, M, G. Diferencial: Suporte ergonômico para atividades físicas.', 'https://www.hardyn.com.br/app/assets/images/dinamica/produto/2138/cor_0/hdn1948-top-de-corrida-com-bolso-nas-costas-lilas-020425-281839.png')">
+            <img src="https://www.hardyn.com.br/app/assets/images/dinamica/produto/2138/cor_0/hdn1948-top-de-corrida-com-bolso-nas-costas-lilas-020425-281839.png" alt="Top Lilás">
+            <h3>Top Lilás</h3>
+            <p>Material: Algodão orgânico. Cores: Lilás, Branco. Tamanhos: P, M, G.</p>
+            <p class="price">R$ 79,90</p>
+            <button class="button" onclick="addToCart('Top Lilás', 79.90, 'https://www.hardyn.com.br/app/assets/images/dinamica/produto/2138/cor_0/hdn1948-top-de-corrida-com-bolso-nas-costas-lilas-020425-281839.png')">Comprar</button>
+        </div>
+        <div class="product" data-category="roupas" onclick="openProductModal('Jaqueta Cinza', 129.90, 'Material: Poliamida. Cores: Cinza, Rosa. Tamanhos: P, M, G. Diferencial: Resistente à água para treinos ao ar livre.', 'https://fitli.fbitsstatic.net/img/p/jaqueta-corta-vento-esportiva-cinza-chumbo-74037/267546.jpg?w=880&h=950&v=no-change&qs=ignore')">
+            <img src="https://fitli.fbitsstatic.net/img/p/jaqueta-corta-vento-esportiva-cinza-chumbo-74037/267546.jpg?w=880&h=950&v=no-change&qs=ignore" alt="Jaqueta Cinza">
+            <h3>Jaqueta Cinza</h3>
+            <p>Material: Poliamida. Cores: Cinza, Rosa. Tamanhos: P, M, G.</p>
+            <p class="price">R$ 129,90</p>
+            <button class="button" onclick="addToCart('Jaqueta Cinza', 129.90, 'https://fitli.fbitsstatic.net/img/p/jaqueta-corta-vento-esportiva-cinza-chumbo-74037/267546.jpg?w=880&h=950&v=no-change&qs=ignore')">Comprar</button>
+        </div>
+        <div class="product" data-category="roupas" onclick="openProductModal('Camiseta Branca', 59.90, 'Material: Poliéster leve. Cores: Branco, Lilás. Tamanhos: P, M, G, GG. Diferencial: Tecido de secagem rápida.', 'https://img.lojasrenner.com.br/item/547908768/zoom/1.jpg')">
+            <img src="https://img.lojasrenner.com.br/item/547908768/zoom/1.jpg" alt="Camiseta Branca">
+            <h3>Camiseta Branca</h3>
+            <p>Material: Poliéster leve. Cores: Branco, Lilás. Tamanhos: P, M, G, GG.</p>
+            <p class="price">R$ 59,90</p>
+            <button class="button" onclick="addToCart('Camiseta Branca', 59.90, 'https://img.lojasrenner.com.br/item/547908768/zoom/1.jpg')">Comprar</button>
+        </div>
+        <div class="product" data-category="roupas promocoes" onclick="openProductModal('Short Rosa', 49.90, 'Material: Elastano e poliéster. Cores: Rosa, Cinza. Tamanhos: P, M, G. Diferencial: Cintura alta para maior conforto.', 'https://via.placeholder.com/300x420?text=Short+Rosa')">
+            <img src="https://tse4.mm.bing.net/th/id/OIP.t0aYqUUNHYtXEdjjec11XgHaJP?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Short Rosa">
+            <h3>Short Rosa</h3>https://http2.mlstatic.com/D_NQ_NP_779909-MLU75151433703_032024-O.webp
+            <p>Material: Elastano e poliéster. Cores: Rosa, Cinza. Tamanhos: P, M, G.</p>
+            <p class="price">R$ 69,90 <span style="text-decoration: line-through; color: #999;">R$ 49,90</span></p>
+            <button class="button" onclick="addToCart('Short Rosa', 49.90, 'https://via.placeholder.com/80x100?text=Short+Rosa')">Comprar</button>
+        </div>
+        <div class="product" data-category="acessorios" onclick="openProductModal('Bolsa Esportiva', 49.90, 'Material: Nylon resistente. Cores: Cinza, Rosa. Tamanhos: Único. Diferencial: Compartimentos para acessórios esportivos.', 'https://via.placeholder.com/300x420?text=Bolsa+Esportiva')">
+            <img src="https://tse3.mm.bing.net/th/id/OIP._C184k7gOs9SzJGnp8TlyQHaG1?pid=ImgDet&w=474&h=437&rs=1&o=7&rm=3" alt="Bolsa Esportiva">
+            <h3>Bolsa Esportiva</h3>
+            <p>Material: Nylon resistente. Cores: Cinza, Rosa. Tamanhos: Único.</p>
+            <p class="price">R$ 49,90</p>
+            <button class="button" onclick="addToCart('Bolsa Esportiva', 49.90, 'https://via.placeholder.com/80x100?text=Bolsa+Esportiva')">Comprar</button>
+        </div>
+        <div class="product" data-category="acessorios" onclick="openProductModal('Boné Lilás', 39.90, 'Material: Algodão e poliéster. Cores: Lilás, Branco. Tamanhos: Único. Diferencial: Proteção solar para treinos ao ar livre.', 'https://via.placeholder.com/300x420?text=Boné+Lilás')">
+            <img src="https://static3.tcdn.com.br/img/img_prod/873120/bone_de_baisebol_lilas_tattoos_931_3_c6b2698c500223a026035d9acb043e0d_20220601145750.jpg" alt="Boné Lilás">
+            <h3>Boné Lilás</h3>
+            <p>Material: Algodão e poliéster. Cores: Lilás, Branco. Tamanhos: Único.</p>
+            <p class="price">R$ 39,90</p>
+            <button class="button" onclick="addToCart('Boné Lilás', 39.90, 'https://via.placeholder.com/80x100?text=Boné+Lilás')">Comprar</button>
+        </div>
+        <div class="product" data-category="acessorios" onclick="openProductModal('Garrafa Térmica', 89.90, 'Material: Aço inoxidável. Cores: Rosa, Cinza. Tamanhos: 500ml. Diferencial: Mantém a temperatura por 12h.', 'https://via.placeholder.com/300x420?text=Garrafa+Térmica')">
+            <img src="https://lojaibyte.vteximg.com.br/arquivos/ids/422205-1200-1200/60004_Foto-5_Garrafa-Termica-Thermos-Colors-500ML-GT-Rosa-Claro.png?v=638380903019300000" alt="Garrafa Térmica">
+            <h3>Garrafa Térmica</h3>
+            <p>Material: Aço inoxidável. Cores: Rosa, Cinza. Tamanhos: 500ml.</p>
+            <p class="price">R$ 89,90</p>
+            <button class="button" onclick="addToCart('Garrafa Térmica', 89.90, 'https://via.placeholder.com/80x100?text=Garrafa+Térmica')">Comprar</button>
+        </div>
+        <div class="product" data-category="kits promocoes" onclick="openProductModal('Kit Yoga', 149.90, 'Material: Variados. Cores: Mix. Tamanhos: P-M-G. Diferencial: Conjunto completo para prática de yoga.', 'https://via.placeholder.com/300x420?text=Kit+Yoga')">
+            <img src="https://img.joomcdn.net/086bcb5f5333fe35e8a436e92cc7c2827420f580_original.jpeg" alt="Kit Yoga">
+            <h3>Kit Yoga</h3>
+            <p>Material: Variados. Cores: Mix. Tamanhos: P-M-G.</p>
+            <p class="price">R$ 199,90 <span style="text-decoration: line-through; color: #999;">R$ 149,90</span></p>
+            <button class="button" onclick="addToCart('Kit Yoga', 149.90, 'https://via.placeholder.com/80x100?text=Kit+Yoga')">Comprar</button>
+        </div>
+        <div class="product" data-category="kits" onclick="openProductModal('Kit Corrida', 179.90, 'Material: Variados. Cores: Rosa, Cinza. Tamanhos: P-M-G. Diferencial: Legging e top otimizados para corrida.', 'https://via.placeholder.com/300x420?text=Kit+Corrida')">
+            <img src="https://cdn11.bigcommerce.com/s-21x65e8kfn/images/stencil/original/products/70000/345997/ADI17213_1000_11__15564.1719933509.jpg" alt="Kit Corrida">
+            <h3>Kit Corrida</h3>
+            <p>Material: Variados. Cores: Rosa, Cinza. Tamanhos: P-M-G.</p>
+            <p class="price">R$ 179,90</p>
+            <button class="button" onclick="addToCart('Kit Corrida', 179.90, 'https://via.placeholder.com/80x100?text=Kit+Corrida')">Comprar</button>
+        </div>
+    </div>
+</section>
+
+<section id="sobre" class="section" style="display: none;">
+    <h2>Sobre Nós</h2>
+    <p style="font-size: 1.1em; line-height: 1.8; color: #666666; text-align: center; max-width: 800px; margin: 0 auto;">FitHer é uma marca dedicada a empoderar mulheres ativas, oferecendo moda esportiva que combina design sofisticado, conforto e funcionalidade para atividades físicas.</p>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; margin-top: 40px;">
+        <div style="flex: 1; min-width: 260px; max-width: 350px; background: #F5E6E8; border-radius: 10px; padding: 30px; text-align: center; box-shadow: 0 2px 8px rgba(245, 230, 232, 0.2);">
+            <h3 style="font-family: 'Lora', serif; color: #000; font-size: 1.2em; margin-bottom: 10px;">Missão</h3>
+            <p style="color: #666; font-size: 1em;">Inspirar e apoiar mulheres a conquistarem seus objetivos com estilo, conforto e autoestima.</p>
+        </div>
+        <div style="flex: 1; min-width: 260px; max-width: 350px; background: #F5E6E8; border-radius: 10px; padding: 30px; text-align: center; box-shadow: 0 2px 8px rgba(245, 230, 232, 0.2);">
+            <h3 style="font-family: 'Lora', serif; color: #000; font-size: 1.2em; margin-bottom: 10px;">Valores</h3>
+            <ul style="color: #666; font-size: 1em; list-style: none; padding: 0;">
+                <li>• Qualidade e inovação</li>
+                <li>• Inclusão e diversidade</li>
+                <li>• Sustentabilidade</li>
+                <li>• Respeito ao corpo feminino</li>
+            </ul>
+        </div>
+        <div style="flex: 1; min-width: 260px; max-width: 350px; background: #F5E6E8; border-radius: 10px; padding: 30px; text-align: center; box-shadow: 0 2px 8px rgba(245, 230, 232, 0.2);">
+            <h3 style="font-family: 'Lora', serif; color: #000; font-size: 1.2em; margin-bottom: 10px;">Selo de Confiança</h3>
+            <img src="https://img.icons8.com/fluency/48/000000/verified-badge.png" alt="Selo de Confiança" style="margin-bottom: 10px;">
+            <p style="color: #666; font-size: 1em;">Compra 100% segura<br>Produtos testados e aprovados</p>
+        </div>
+    </div>
+</section>
+
+<section id="contato" class="section" style="display: none;">
+    <h2>Contato</h2>
+    <p style="text-align: center; color: #666666; margin-bottom: 30px;">Entre em contato: contato@fither.com</p>
+    <form id="contact-form">
+        <input type="text" placeholder="Nome" required>
+        <input type="email" placeholder="Email" required>
+        <textarea placeholder="Mensagem" rows="5" required></textarea>
+        <button type="submit">Enviar</button>
+    </form>
+</section>
+
+<section id="carrinho" class="section" style="display: none;">
+    <h2>Carrinho de Compras</h2>
+    <div class="cart-container">
+        <div class="cart-items" id="cart-items">
+            <div class="cart-empty" id="cart-empty">Seu carrinho está vazio.</div>
+        </div>
+        <div class="cart-summary" id="cart-summary" style="display: none;">
+            <h3>Resumo do Pedido</h3>
+            <p>Subtotal: R$ <span id="subtotal">0.00</span></p>
+            <p>Frete: R$ <span id="frete">20.00</span></p>
+            <p style="font-size: 1.3em; font-weight: bold;">Total: R$ <span id="total">0.00</span></p>
+            <button class="button" onclick="finalizarCompra()">Finalizar Compra</button>
+        </div>
+    </div>
+</section>
+
+<section id="finalizar" class="section" style="display: none;">
+    <h2>Finalizar Compra</h2>
+    <p style="color: #666666; margin-bottom: 30px;">Simulação de Envio e Pagamento:</p>
+    <form style="max-width: 600px; margin: 0 auto;">
+        <input type="text" placeholder="Endereço de Entrega" required>
+        <input type="text" placeholder="CEP" id="cep" required>
+        <p style="color: #666666;">Frete: R$ <span id="frete-finalizar">20.00</span></p>
+        <input type="text" placeholder="Método de Pagamento (ex: Cartão)" required>
+        <button type="button" class="button" onclick="confirmarCompra()">Confirmar</button>
+    </form>
+</section>
+
+<div id="product-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeProductModal()">&times;</span>
+        <img id="modal-image" src="" alt="Produto">
+        <h3 id="modal-name"></h3>
+        <p id="modal-description"></p>
+        <p id="modal-price" class="price"></p>
+        <button class="button" id="modal-add-to-cart">Adicionar ao Carrinho</button>
+    </div>
+</div>
+
+
+<!-- Depoimentos -->
+<section class="section" style="background: #F5F5F5; padding-top: 40px; padding-bottom: 40px;">
+    <h2 style="margin-bottom: 30px;">O que nossas clientes dizem</h2>
+    <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
+        <div style="background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 30px; max-width: 340px; min-width: 260px;">
+            <p style="font-style: italic; color: #444;">“A legging é super confortável e não marca! Recomendo muito.”</p>
+            <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Cliente" style="width: 40px; height: 40px; border-radius: 50%;">
+                <span style="font-weight: bold; color: #000;">Juliana S.</span>
+            </div>
+        </div>
+        <div style="background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 30px; max-width: 340px; min-width: 260px;">
+            <p style="font-style: italic; color: #444;">“Entrega rápida e atendimento excelente. Amei o top lilás!”</p>
+            <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
+                <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Cliente" style="width: 40px; height: 40px; border-radius: 50%;">
+                <span style="font-weight: bold; color: #000;">Renata M.</span>
+            </div>
+        </div>
+        <div style="background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 30px; max-width: 340px; min-width: 260px;">
+            <p style="font-style: italic; color: #444;">“Produtos de qualidade e caimento perfeito. Já virei cliente fiel!”</p>
+            <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
+                <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Cliente" style="width: 40px; height: 40px; border-radius: 50%;">
+                <span style="font-weight: bold; color: #000;">Camila F.</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Instagram -->
+<section class="section" style="padding-top: 30px; padding-bottom: 30px; background: #fff;">
+    <h2 style="margin-bottom: 25px;">Siga a FitHer no Instagram</h2>
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: center;">
+        <a href="https://instagram.com/fither" target="_blank" style="display: block;">
+            <img src="https://via.placeholder.com/120x120?text=Insta+1" alt="Instagram 1" style="border-radius: 10px;">
+        </a>
+        <a href="https://instagram.com/fither" target="_blank" style="display: block;">
+            <img src="https://via.placeholder.com/120x120?text=Insta+2" alt="Instagram 2" style="border-radius: 10px;">
+        </a>
+        <a href="https://instagram.com/fither" target="_blank" style="display: block;">
+            <img src="https://via.placeholder.com/120x120?text=Insta+3" alt="Instagram 3" style="border-radius: 10px;">
+        </a>
+        <a href="https://instagram.com/fither" target="_blank" style="display: block;">
+            <img src="https://via.placeholder.com/120x120?text=Insta+4" alt="Instagram 4" style="border-radius: 10px;">
+        </a>
+    </div>
+    <p style="text-align: center; margin-top: 20px; color: #666;">@fither | Compartilhe seu look com <b>#FitHer</b></p>
+</section>
+
+<footer>
+    <div style="margin-bottom: 10px;">
+        <img src="https://img.icons8.com/ios-filled/24/000000/instagram-new.png" alt="Instagram" style="vertical-align: middle; margin-right: 8px;">
+        <a href="https://instagram.com/fither" target="_blank" style="color: #000; text-decoration: none; font-weight: 600;">@fither</a>
+        &nbsp;|&nbsp;
+        <img src="https://img.icons8.com/ios-filled/24/000000/whatsapp.png" alt="WhatsApp" style="vertical-align: middle; margin-right: 8px;">
+        <a href="https://wa.me/5500000000000" target="_blank" style="color: #000; text-decoration: none; font-weight: 600;">WhatsApp</a>
+    </div>
+    <p>&copy; 2025 FitHer. Todos os direitos reservados.</p>
+</footer>
+
+<script>
+    let cart = [];
+    let total = 0;
+    let currentSlide = 0;
+    const carousel = document.getElementById('carousel');
+    const slides = carousel.children.length;
+
+    function toggleMenu() {
+        const nav = document.querySelector('nav');
+        nav.classList.toggle('active');
+    }
+
+    function showSection(sectionId) {
+        document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+        document.getElementById(sectionId).style.display = 'block';
+        if (sectionId === 'carrinho') {
+            updateCart();
+        }
+        toggleMenu();
+    }
+
+    function filterProducts(category) {
+        const products = document.querySelectorAll('#product-list .product');
+        const buttons = document.querySelectorAll('.filters button');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        products.forEach(prod => {
+            if (category === 'all' || prod.dataset.category.includes(category)) {
+                prod.style.display = 'block';
+            } else {
+                prod.style.display = 'none';
+            }
+        });
+    }
+
+    function addToCart(name, price, image) {
+        const existingItem = cart.find(item => item.name === name);
+        if (existingItem) {
+            existingItem.quantity += 1;
+            total += price;
+        } else {
+            cart.push({ name, price, image, quantity: 1 });
+            total += price;
+        }
+        updateCart();
+        // Fecha o modal se estiver aberto
+        closeProductModal();
+        // Redireciona para a sessão de pagamento ao adicionar
+        showSection('finalizar');
+    }
+
+    function removeFromCart(index) {
+        total -= cart[index].price * cart[index].quantity;
+        cart.splice(index, 1);
+        updateCart();
+    }
+
+    function updateQuantity(index, delta) {
+        const item = cart[index];
+        item.quantity += delta;
+        if (item.quantity <= 0) {
+            removeFromCart(index);
+        } else {
+            total += delta * item.price;
+            updateCart();
+        }
+    }
+
+    function updateCart() {
+        const cartItems = document.getElementById('cart-items');
+        const cartEmpty = document.getElementById('cart-empty');
+        const cartSummary = document.getElementById('cart-summary');
+        cartItems.innerHTML = '';
+        if (cart.length === 0) {
+            cartEmpty.style.display = 'block';
+            cartSummary.style.display = 'none';
+        } else {
+            cartEmpty.style.display = 'none';
+            cartSummary.style.display = 'block';
+            cart.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-item-details">
+                        <h4>${item.name}</h4>
+                        <p>R$ ${item.price.toFixed(2)}</p>
+                        <div class="cart-item-quantity">
+                            <button onclick="updateQuantity(${index}, -1)">-</button>
+                            <span>${item.quantity}</span>
+                            <button onclick="updateQuantity(${index}, 1)">+</button>
+                        </div>
+                    </div>
+                    <button class="remove" onclick="removeFromCart(${index})">Remover</button>
+                `;
+                cartItems.appendChild(div);
+            });
+            document.getElementById('subtotal').textContent = total.toFixed(2);
+            document.getElementById('total').textContent = (total + 20).toFixed(2);
+        }
+    }
+
+    function finalizarCompra() {
+        if (cart.length === 0) {
+            alert('Seu carrinho está vazio!');
+            return;
+        }
+        showSection('finalizar');
+    }
+
+    function confirmarCompra() {
+        const endereco = document.querySelector('#finalizar input[placeholder="Endereço de Entrega"]').value;
+        const cep = document.querySelector('#cep').value;
+        const pagamento = document.querySelector('#finalizar input[placeholder="Método de Pagamento (ex: Cartão)"]').value;
+        if (endereco && cep && pagamento) {
+            alert(`Compra finalizada com sucesso!\nEndereço: ${endereco}\nCEP: ${cep}\nFrete: R$ 20,00\nPagamento: ${pagamento}\nTotal: R$ ${(total + 20).toFixed(2)}`);
+            cart = [];
+            total = 0;
+            updateCart();
+            showSection('home');
+        } else {
+            alert('Por favor, preencha todos os campos.');
+        }
+    }
+
+    function openProductModal(name, price, description, image) {
+        const modal = document.getElementById('product-modal');
+        document.getElementById('modal-name').textContent = name;
+        document.getElementById('modal-price').textContent = `R$ ${price.toFixed(2)}`;
+        document.getElementById('modal-description').textContent = description;
+        document.getElementById('modal-image').src = image;
+        document.getElementById('modal-add-to-cart').onclick = () => {
+            addToCart(name, price, image);
+        };
+        modal.style.display = 'flex';
+    }
+
+    function closeProductModal() {
+        document.getElementById('product-modal').style.display = 'none';
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides;
+        carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides) % slides;
+        carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+
+    document.getElementById('contact-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nome = document.querySelector('#contact-form input[placeholder="Nome"]').value;
+        const email = document.querySelector('#contact-form input[placeholder="Email"]').value;
+        const mensagem = document.querySelector('#contact-form textarea').value;
+        if (nome && email && mensagem) {
+            alert('Mensagem enviada com sucesso!');
+            e.target.reset();
+        } else {
+            alert('Por favor, preencha todos os campos.');
+        }
+    });
+
+    // Auto-rodar carrossel
+    setInterval(nextSlide, 5000);
+
+    // Iniciar na home
+    showSection('home');
+</script>
+
+</body>
+</html>
